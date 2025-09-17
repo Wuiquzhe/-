@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <!-- 背景 -->
+  <rect width="128" height="128" rx="20" ry="20" fill="#4CAF50"/>
+  
+  <!-- 日历图标 -->
+  <rect x="28" y="28" width="72" height="60" rx="5" ry="5" fill="white"/>
+  <rect x="28" y="28" width="72" height="14" rx="3" ry="3" fill="#2E7D32"/>
+  
+  <!-- 任务图标 - 三个点 -->
+  <circle cx="40" cy="50" r="6" fill="#4CAF50"/>
+  <circle cx="64" cy="50" r="6" fill="#4CAF50"/>
+  <circle cx="88" cy="50" r="6" fill="#4CAF50"/>
+  
+  <!-- 任务图标 - 两条线 -->
+  <line x1="40" y1="70" x2="88" y2="70" stroke="#4CAF50" stroke-width="4" stroke-linecap="round"/>
+  <line x1="40" y1="85" x2="88" y2="85" stroke="#4CAF50" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- 装饰元素 -->
+  <path d="M96 20 L110 34 L96 48" fill="none" stroke="white" stroke-width="3" stroke-linejoin="round" opacity="0.7"/>
+</svg>

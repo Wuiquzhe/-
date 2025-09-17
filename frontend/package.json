@@ -1,0 +1,29 @@
+{
+  "name": "dailyenchant",
+  "version": "1.0.0",
+  "description": "Windows桌面端工作计划与进展记录小程序",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "echo 'Building not configured yet'",
+    "test": "echo 'Tests not configured yet'"
+  },
+  "keywords": [
+    "electron",
+    "task-manager",
+    "work-planner",
+    "desktop-app"
+  ],
+  "author": "DailyEnchant Team",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.5.0",
+    "electron-is-dev": "^2.0.0",
+    "marked": "^9.1.2"
+  },
+  "devDependencies": {
+    "electron": "^26.0.0",
+    "electron-reloader": "^1.2.3"
+  }
+}

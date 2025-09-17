@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DailyEnchant - 工作计划记录</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- 主容器 -->
+    <div class="container">
+        <!-- 顶部导航栏 -->
+        <header class="header">
+            <div class="logo">
+                <img src="assets/icon.svg" alt="DailyEnchant Logo" width="32" height="32">
+                <h1>DailyEnchant</h1>
+            </div>
+            <div class="header-controls">
+                <button id="create-task-btn" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> 新建任务
+                </button>
+                <button id="refresh-btn" class="btn btn-secondary">
+                    <i class="fas fa-sync-alt"></i> 刷新
+                </button>
+                <div class="view-switcher">
+                    <button id="tasks-view-btn" class="btn btn-secondary active">
+                        <i class="fas fa-tasks"></i> 任务
+                    </button>
+                    <button id="calendar-view-btn" class="btn btn-secondary">
+                        <i class="fas fa-calendar-alt"></i> 日历
+                    </button>
+                    <button id="stats-view-btn" class="btn btn-secondary">
+                        <i class="fas fa-chart-bar"></i> 统计
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 左侧边栏 - 分类和过滤 -->
+            <aside class="sidebar">
+                <div class="section">
+                    <h3>任务状态</h3>
+                    <ul class="filter-list">
+                        <li>
+                            <a href="#" class="filter-item active" data-filter="all">
+                                <i class="fas fa-list"></i> 全部任务
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="filter-item" data-filter="todo">
+                                <i class="fas fa-circle"></i> 待办任务
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="filter-item" data-filter="in_progress">
+                                <i class="fas fa-spinner"></i> 进行中
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="filter-item" data-filter="completed">
+                                <i class="fas fa-check-circle"></i> 已完成
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="filter-item" data-filter="overdue">
+                                <i class="fas fa-exclamation-circle"></i> 已过期
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="filter-item" data-filter="due_soon">
+                                <i class="fas fa-clock"></i> 即将到期
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <h3>任务分类</h3>
+                    <div class="category-actions">
+                        <button id="add-category-btn" class="btn btn-sm btn-secondary">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <ul id="category-list" class="category-list">
+                        <li>
+                            <a href="#" class="category-item active" data-category="all">
+                                <span class="category-color" style="background-color: #4CAF50;"></span>
+                                全部分类
+                            </a>
+                        </li>
+                        <!-- 分类列表将由JavaScript动态生成 -->
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <h3>搜索</h3>
+                    <div class="search-box">
+                        <input type="text" id="search-input" placeholder="搜索任务..." class="search-input">
+                        <button id="search-btn" class="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- 右侧主内容 - 任务列表和详情 -->
+            <div class="content-area">
+                <!-- 任务列表视图 -->
+                <div id="tasks-view" class="view active">
+                    <!-- 任务列表头部 -->
+                    <div class="tasks-header">
+                        <h2>任务列表</h2>
+                        <div class="tasks-controls">
+                            <select id="sort-select" class="sort-select">
+                                <option value="updated_at_desc">最近更新 (新→旧)</option>
+                                <option value="updated_at_asc">最近更新 (旧→新)</option>
+                                <option value="due_date_asc">截止日期 (近→远)</option>
+                                <option value="due_date_desc">截止日期 (远→近)</option>
+                                <option value="priority">优先级</option>
+                            </select>
+                            <button id="filter-tasks-btn" class="btn btn-sm btn-secondary">
+                                <i class="fas fa-filter"></i> 筛选
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 任务列表 -->
+                    <div id="tasks-container" class="tasks-container">
+                        <!-- 任务卡片将由JavaScript动态生成 -->
+                        <div class="empty-state">
+                            <i class="fas fa-tasks"></i>
+                            <p>暂无任务</p>
+                            <button id="create-first-task-btn" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> 创建第一个任务
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 日历视图 -->
+                <div id="calendar-view" class="view">
+                    <div class="calendar-header">
+                        <button id="prev-month-btn" class="btn btn-sm btn-secondary">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <h2 id="current-month"></h2>
+                        <button id="next-month-btn" class="btn btn-sm btn-secondary">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="calendar-grid">
+                        <!-- 日历网格将由JavaScript动态生成 -->
+                    </div>
+                </div>
+
+                <!-- 统计视图 -->
+                <div id="stats-view" class="view">
+                    <div class="stats-summary">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="total-tasks">0</h3>
+                                <p>总任务数</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-circle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="todo-tasks">0</h3>
+                                <p>待办任务</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-spinner"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="in-progress-tasks">0</h3>
+                                <p>进行中</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="completed-tasks">0</h3>
+                                <p>已完成</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stats-charts">
+                        <!-- 统计图表将由JavaScript动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 任务详情模态框 -->
+    <div id="task-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">任务详情</h2>
+                <button id="close-modal-btn" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="task-form">
+                    <div class="form-group">
+                        <label for="task-title">任务标题 *</label>
+                        <input type="text" id="task-title" class="form-control" placeholder="输入任务标题" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="task-category">任务分类</label>
+                            <select id="task-category" class="form-control">
+                                <!-- 分类选项将由JavaScript动态生成 -->
+                            </select>
+                        </div>
+                        <div class="form-group col">
+                            <label for="task-priority">优先级</label>
+                            <select id="task-priority" class="form-control">
+                                <option value="low">低</option>
+                                <option value="medium" selected>中</option>
+                                <option value="high">高</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="task-due-date">截止日期</label>
+                            <input type="date" id="task-due-date" class="form-control">
+                        </div>
+                        <div class="form-group col">
+                            <label for="task-status">状态</label>
+                            <select id="task-status" class="form-control">
+                                <option value="todo" selected>待办</option>
+                                <option value="in_progress">进行中</option>
+                                <option value="completed">已完成</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-description">任务描述</label>
+                        <textarea id="task-description" class="form-control" rows="4" placeholder="输入任务描述"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-tags">标签 (用逗号分隔)</label>
+                        <input type="text" id="task-tags" class="form-control" placeholder="输入标签">
+                    </div>
+                    <div class="form-group">
+                        <label>进展记录</label>
+                        <div id="progress-records" class="progress-records">
+                            <!-- 进展记录将由JavaScript动态生成 -->
+                        </div>
+                        <div class="add-progress">
+                            <input type="text" id="new-progress" class="form-control" placeholder="添加进展记录">
+                            <button type="button" id="add-progress-btn" class="btn btn-sm btn-secondary">
+                                添加
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="delete-task-btn" class="btn btn-danger">
+                    <i class="fas fa-trash-alt"></i> 删除
+                </button>
+                <div class="modal-actions">
+                    <button id="cancel-modal-btn" class="btn btn-secondary">
+                        取消
+                    </button>
+                    <button id="save-task-btn" class="btn btn-primary">
+                        保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载指示器 -->
+    <div id="loading-indicator" class="loading-indicator">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- 通知提示 -->
+    <div id="notification" class="notification">
+        <div class="notification-content">
+            <i id="notification-icon" class="fas"></i>
+            <span id="notification-message"></span>
+        </div>
+    </div>
+
+    <!-- JavaScript 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/renderer.js"></script>
+</body>
+</html>
